@@ -144,16 +144,59 @@
       background-repeat: no-repeat;
       background-size: cover;
       display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    ul {
+       display: grid;
+       grid-template-columns: repeat(3, minmax(0, 1fr));
+       gap: 20px;
+    }
+
+    li {
+        width: 100%;
+        height: auto;
+    }
+
+    img {
+        display: block;
+        height: 100%;
+        width: 100%;
     }
   </style>
   <body>
     <input type="file" id="upload" />
-    <img src="./1.png" alt="">
+    <ul>
+      <li>
+        <img src="./1.png" alt="" data-img="./1.png" />
+      </li>
+      <li>
+        <img src="./2.png" alt="" data-img="./2.png" />
+      </li>
+      <li>
+        <img src="./3.png" alt="" data-img="./3.png" />
+      </li>
+      <li>
+        <img src="./4.png" alt="" data-img="./4.png" />
+      </li>
+    </ul>
     <div style="background-image: url('./1.png')" class="cover-image"></div>
   </body>
   <script>
     const uploader = document.querySelector("#upload");
-    const img = document.querySelector('.cover-image');
+    const imgs = document.querySelectorAll("img");
+    const coverImg = document.querySelector(".cover-image");
+
+    for (let img of imgs) {
+      img.addEventListener("click", function (event) {
+        const imgPath = this.dataset.img;
+
+        coverImg.style.backgroundImage = `url(${imgPath})`;
+        coverImg.style.display = "block";
+      });
+    }
 
     uploader.addEventListener("change", (event) => {
       const file = event.target.files[0];
@@ -161,11 +204,11 @@
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = function () {
-        img.style.backgroundImage = `url(${reader.result})`
-        img.style.display = 'block';
+        coverImg.style.backgroundImage = `url(${reader.result})`;
+        coverImg.style.display = "block";
       };
       reader.onerror = function (error) {
-        alert('file is error');
+        alert("file is error");
       };
     });
   </script>
